@@ -13,7 +13,8 @@
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 #include "tones.h"
-#include "starfield.h" 
+#include "starfield.h"
+#include "fire.h" 
 
 #define OLED_RESET 4
 Adafruit_SSD1306 display(OLED_RESET);
@@ -25,7 +26,7 @@ Adafruit_SSD1306 display(OLED_RESET);
 // Global varaibles
 uint8_t color = WHITE;
 int speakerPin = 8;
-int bullet_button = 2;
+int bullet_button = 12;
 int buttonState = 0;
 
 
@@ -83,9 +84,7 @@ bool fire_bullet() {
 
 void bullet(bool fire) {
   if( fire == true ){
-    for (uint8_t i = 0; i < display.width()-10; i++) {
-      display.drawPixel(i, shipPosition()+5, WHITE);
-    } 
+    trigger_bullet(shipPosition());
   } 
 }
  
@@ -97,6 +96,7 @@ void setup() {
   init_poti();
   init_starfield();
   init_bullet_button();
+  init_bullet();
   
 }
 
@@ -110,6 +110,11 @@ void loop() {
   display_ship(shipPosition());
   
   bullet(fire_bullet());
+
+  draw_bullet();
+  move_bullet();
+
+  
   
   display.display();
   delay(5);
