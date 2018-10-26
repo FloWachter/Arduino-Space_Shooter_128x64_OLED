@@ -5,7 +5,8 @@
   UX Designer & Developer
   
   Graphics created with:
-  arduino.cc/reference/en/language/variables/data-types/array/
+  http://marlinfw.org/tools/u8glib/converter.html
+  
 
 *********************************************************************/
 #include <SPI.h>
@@ -14,6 +15,7 @@
 #include <Adafruit_SSD1306.h>
 #include "tones.h"
 #include "starfield.h"
+#include "meteorites.h"
 #include "fire.h" 
 
 #define OLED_RESET 4
@@ -94,9 +96,15 @@ void bullet(bool fire) {
 void setup() {
   init_display();
   init_poti();
+  
   init_starfield();
+  init_meteo();
+  
   init_bullet_button();
   init_bullet();
+  
+
+
   
 }
 
@@ -113,6 +121,10 @@ void loop() {
 
   draw_bullet();
   move_bullet();
+
+  draw_meteo();
+  move_meteo();
+
 
   
   
