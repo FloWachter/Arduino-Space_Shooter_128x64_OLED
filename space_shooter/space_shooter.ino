@@ -30,6 +30,9 @@ uint8_t color = WHITE;
 int speakerPin = 8;
 int bullet_button = 12;
 int buttonState = 0;
+int ship_margin = 10;
+int amor = 100;
+int score = 0;
 
 
 // ----------------------------------------------------------
@@ -64,7 +67,7 @@ void display_ship(int pos){
   static const unsigned char PROGMEM spaceShip_img[] = {
   0x78, 0x00, 0x7c, 0x00, 0x30, 0x00, 0x3f, 0x80, 0xfc, 0xc0, 0xfc, 
   0xc0, 0x3f, 0x80, 0x30, 0x00,0x7c, 0x00, 0x78, 0x00 };
-  display.drawBitmap(10, pos,spaceShip_img, 10, 10, 1);
+  display.drawBitmap(ship_margin, pos,spaceShip_img, 10, 10, 1);
 }
 
 int shipPosition(){
@@ -89,7 +92,71 @@ void bullet(bool fire) {
     trigger_bullet(shipPosition());
   } 
 }
- 
+
+void collition_check(int shipPos) {
+  // METERIORIT COLLITION
+  for (uint8_t i = 0; i < MAX_METEORITES; i++) { 
+    if( meteo[i].x < ship_margin + 6 &&  meteo[i].x >= ship_margin ) {
+      // in range of x-axses 
+      
+      if( meteo[i].y < shipPos + 8 &&  meteo[i].y >= shipPos ) {
+        // in range of y-axses
+        if(amor > 0 ){ 
+          tone(speakerPin, NOTE_C2, 100);
+          amor --;          
+        }else {
+          amor = 0;
+        }
+        meteo[i].visible = false;
+      }
+    }
+  }
+
+  // BULLET COLLITION
+  for (uint8_t i_bu = 0; i_bu < MAX_BULLETS; i_bu++) {
+    for (uint8_t i_me = 0; i_me < MAX_METEORITES; i_me++) { 
+      if (fire[i_bu].x >= meteo[i_me].x && fire[i_bu].x < meteo[i_me].x + 10 && fire[i_bu].fired == true) {
+        if (fire[i_bu].y >= meteo[i_me].y && fire[i_bu].y < meteo[i_me].y + 10 ) {
+          tone(speakerPin, NOTE_E3, 100);
+          meteo[i_me].visible = false;
+          fire[i_bu].fired = false;
+          score++;
+        }
+      }
+    }
+  }
+}
+
+
+
+
+
+void display_lifes(){
+static const unsigned char PROGMEM armor_img[] = {
+  0xFC, // ######..
+  0xFC, // ######..
+  0xFC, // ######..
+  0xFC, // ######..
+  0x78, // .####...
+  0x30, // ..##....
+};
+  
+  display.setTextColor(WHITE);
+  display.setTextSize(1);
+  display.setCursor(display.width() - 20, 0);
+  display.println(amor);
+  display.drawBitmap(display.width() - 30, 0, armor_img , 6, 6, 1);
+}
+
+void display_score(){
+  display.setTextColor(WHITE);
+  display.setTextSize(1);
+  display.setCursor(10, 0);
+  display.println(score);
+  
+}
+
+
 // ----------------------------------------------------------
 // SETUP
 // ----------------------------------------------------------
@@ -102,11 +169,9 @@ void setup() {
   
   init_bullet_button();
   init_bullet();
-  
-
-
-  
 }
+
+
 
 // ----------------------------------------------------------
 // LOOP 
@@ -124,6 +189,13 @@ void loop() {
 
   draw_meteo();
   move_meteo();
+  
+  collition_check(shipPosition());
+  display_lifes();
+  display_score();
+
+  
+  
 
 
   

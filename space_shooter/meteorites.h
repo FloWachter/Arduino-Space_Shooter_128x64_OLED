@@ -3,7 +3,7 @@
 const uint8_t MAX_METEORITES = 4;
 
 struct Meteorites {
-  int8_t x, y, vx;
+  int8_t x, y, vx, visible;
 };
 
 extern Meteorites meteo[MAX_METEORITES];
@@ -11,5 +11,6 @@ extern Meteorites meteo[MAX_METEORITES];
 void init_meteo();
 void move_meteo();
 void draw_meteo();
+bool check_colition_ship();
 #endif
 

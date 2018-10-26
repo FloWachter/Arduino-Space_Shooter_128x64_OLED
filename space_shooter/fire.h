@@ -1,7 +1,7 @@
 #ifndef __FIRE_H_
 #define __FIRE_H_
 
-const uint8_t MAX_BULLETS = 118;
+const uint8_t MAX_BULLETS = 10;
 
 struct Bullet {
   int8_t x, y;

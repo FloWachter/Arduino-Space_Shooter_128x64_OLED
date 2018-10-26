@@ -13,6 +13,7 @@ void init_meteo() {
     meteo[i].x = random(display.width());
     meteo[i].y = random(display.height());
     meteo[i].vx = random(3) + 1;
+    meteo[i].visible = true;
   }
 }
 
@@ -23,6 +24,7 @@ void move_meteo() {
       meteo[i].x = display.width();
       meteo[i].y = random(display.height());
       meteo[i].vx = random(3) + 1;
+      meteo[i].visible = true;
     }
   }
 }
@@ -42,7 +44,11 @@ void draw_meteo() {
       0x3F,0x00, // ..######........
       0x3E,0x00 // ..#####.........
     };
-  display.drawBitmap(meteo[i].x, meteo[i].y,meteo_img, 10, 10, 1);
+    if(meteo[i].visible == true ){
+      display.drawBitmap(meteo[i].x, meteo[i].y,meteo_img, 10, 10, 1);
+    }
   }
 }
+
+
 
