@@ -7,8 +7,9 @@ The Game "Space_Shooter" 128x64px OLED Black & White
 - Sdafruit ssd1306 128x64 OLED
 
 ##How to wire
-
+...
 
 ##libaries
+...
 
 
